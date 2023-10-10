@@ -15,9 +15,18 @@ public class Player : MonoBehaviour
 
     #region Numeric Values
 
+    [Header("Movement Info")]
     [SerializeField]
     private float moveSpeed;
+    [SerializeField]
+    private float jumpForce;
     private float xInput;
+
+    #endregion
+
+    #region Boolean Values
+
+    private bool isGrounded;
 
     #endregion
 
@@ -39,6 +48,11 @@ public class Player : MonoBehaviour
     private void CheckInput()
     {
         xInput = Input.GetAxis("Horizontal");
+
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
     }
 
     private void Movement()
@@ -58,9 +72,33 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+    }
+
     private void AnimatorController()
     {
         bool isMoving = rb.velocity.x != 0;
+
+        animator.SetFloat("yVelocity", rb.velocity.y);
         animator.SetBool("isMoving", isMoving);
+        animator.SetBool("isGrounded", isGrounded);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
     }
 }
