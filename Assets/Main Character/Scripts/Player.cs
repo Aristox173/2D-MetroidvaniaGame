@@ -26,8 +26,6 @@ public class Player : MonoBehaviour
 
     #region Boolean Values
 
-    private bool isGrounded;
-
     #endregion
 
     void Start()
@@ -49,7 +47,7 @@ public class Player : MonoBehaviour
     {
         xInput = Input.GetAxis("Horizontal");
 
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
@@ -83,22 +81,6 @@ public class Player : MonoBehaviour
 
         animator.SetFloat("yVelocity", rb.velocity.y);
         animator.SetBool("isMoving", isMoving);
-        animator.SetBool("isGrounded", isGrounded);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
-    }
 }
