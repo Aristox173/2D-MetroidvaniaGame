@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Spike"))
+        if (collision.CompareTag("Obstacle"))
         {
             Die();
         }
@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour
 
     void Die()
     {
-        StartCoroutine(Respawn(0.5f));
+        StartCoroutine(Respawn(1.5f));
     }
 
     IEnumerator Respawn(float duration)
