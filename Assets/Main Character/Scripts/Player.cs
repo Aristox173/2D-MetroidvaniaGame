@@ -44,6 +44,11 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     #endregion
 
+    [SerializeField]
+    public float coyoteTimeDuration;
+    public float coyoteTime;
+
+
     #region Boolean Values
 
     #endregion
@@ -65,11 +70,19 @@ public class Player : MonoBehaviour
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
 
         if (isGrounded)
+        {
             canDash = true;
+            coyoteTime = coyoteTimeDuration; // Resetea el tiempo de Coyote Time cuando esté en el suelo
+        }
+        else
+        {
+            coyoteTime -= Time.deltaTime; // Disminuye el tiempo de Coyote Time si no está en el suelo
+        }
 
         dashTime -= Time.deltaTime;
         dashCooldownTimer -= Time.deltaTime;
     }
+
 
     private void CheckInput()
     {
@@ -117,9 +130,10 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (isGrounded)
+        if (isGrounded || coyoteTime > 0) // Permitir salto si está en el suelo o durante el Coyote Time
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
+
 
     private void Dash()
     {

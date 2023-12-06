@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro.Examples;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -9,6 +7,7 @@ public class GameController : MonoBehaviour
     Rigidbody2D playerRb;
     TrailRenderer trailRenderer;
     [SerializeField] private ParticleSystem testParticleSystem = default;
+    [SerializeField] private AudioClip deathClip = default; // Audio clip for death sound
 
     private void Awake()
     {
@@ -37,24 +36,32 @@ public class GameController : MonoBehaviour
     void Die()
     {
         StartCoroutine(Respawn(1.5f));
+        PlayDeathSound(); // Play the death sound
+    }
+
+    void PlayDeathSound()
+    {
+        if (deathClip != null)
+        {
+            AudioSource.PlayClipAtPoint(deathClip, transform.position);
+        }
     }
 
     IEnumerator Respawn(float duration)
     {
         testParticleSystem.Play();
-        playerRb.velocity = new Vector2(0, 0);
+        playerRb.velocity = Vector2.zero;
         playerRb.simulated = false;
 
         trailRenderer.enabled = false;
 
-        transform.localScale = new Vector3(0, 0, 0);
+        transform.localScale = Vector3.zero;
         yield return new WaitForSeconds(duration);
         transform.position = checkpointPos;
-        transform.localScale = new Vector3(1, 1, 1);
+        transform.localScale = Vector3.one;
 
         trailRenderer.enabled = true;
 
         playerRb.simulated = true;
-        
     }
 }
