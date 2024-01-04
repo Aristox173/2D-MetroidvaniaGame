@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameController : MonoBehaviour
 {
@@ -8,7 +10,9 @@ public class GameController : MonoBehaviour
     TrailRenderer trailRenderer;
     [SerializeField] private ParticleSystem testParticleSystem = default;
     [SerializeField] private AudioClip deathClip = default; // Audio clip for death sound
-    [SerializeField] private AudioClip coinClip = default; // Audio clip for death sound
+    [SerializeField] private AudioClip coinClip = default; // Audio clip for coin sound
+    [SerializeField] private AudioClip winClip = default; // Audio clip for win sound
+    
 
     private int collectedCoins = 0;
     private bool shouldOpenWall = false;
@@ -19,6 +23,7 @@ public class GameController : MonoBehaviour
     public Transform playerCheckpoint; // Reference to checkpoint 7 or wherever the enemy activates
     private bool playerReachedCheckpoint7 = false;
 
+    public Trap trap;
 
     private void Awake()
     {
@@ -46,6 +51,20 @@ public class GameController : MonoBehaviour
         if (collision.CompareTag("Checkpoint"))
         {
             enemyController.ActivateEnemy();
+        }
+
+        if (collision.CompareTag("Meta"))
+        {
+            Win();
+        }
+
+    }
+
+    private void Win()
+    {
+        if (winClip != null)
+        {
+            AudioSource.PlayClipAtPoint(winClip, transform.position);
         }
     }
 
@@ -129,6 +148,9 @@ public class GameController : MonoBehaviour
                 coin.gameObject.SetActive(true);
             }
         }
+
+        trap.ReactivateTrap();
+
 
         // Close the wall if it was open
         if (shouldOpenWall && wallToOpen != null)

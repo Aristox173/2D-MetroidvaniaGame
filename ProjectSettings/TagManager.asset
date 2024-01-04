@@ -7,6 +7,11 @@ TagManager:
   - Ground
   - Obstacle
   - Coin
+  - Checkpoint
+  - Bullet
+  - Trap
+  - Special Gun
+  - Meta
   layers:
   - Default
   - TransparentFX
